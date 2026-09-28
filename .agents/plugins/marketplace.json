@@ -1,0 +1,20 @@
+{
+  "name": "synology-storage-community",
+  "interface": {
+    "displayName": "Synology Storage Community"
+  },
+  "plugins": [
+    {
+      "name": "synology-storage",
+      "source": {
+        "source": "local",
+        "path": "./plugins/synology-storage"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

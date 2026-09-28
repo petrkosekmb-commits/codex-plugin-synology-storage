@@ -1,0 +1,18 @@
+{
+  "name": "synology-storage",
+  "version": "0.1.0",
+  "description": "Manage mounted Synology shares with bounded search and verified file copies.",
+  "author": {
+    "name": "Synology Storage contributors"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Synology Storage",
+    "shortDescription": "Find files and verify copies on mounted NAS shares.",
+    "longDescription": "Local file operations for Synology NAS shares: availability, free space, bounded search, folder creation, SHA256-verified copies and external backup status.",
+    "developerName": "Synology Storage contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Help me use Synology Storage."
+  }
+}

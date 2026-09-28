@@ -1,0 +1,6 @@
+{
+  "roots": {
+    "nas": {"path": "//nas.example.invalid/shared", "writable": false},
+    "local": {"path": "C:/NAS-transfer", "writable": false}
+  }
+}
