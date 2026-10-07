@@ -130,3 +130,7 @@ and [Synology file access documentation](https://www.synology.com/en-global/dsm/
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## Podpora projektu
+
+Pokud vám projekt pomáhá, můžete podpořit jeho další vývoj a údržbu na [Buy Me a Coffee](https://buymeacoffee.com/kojakcio). Děkuji za podporu.
