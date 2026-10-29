@@ -141,6 +141,26 @@ class StorageTests(unittest.TestCase):
         self.assertTrue(self.cli(*args, "--apply")[1]["applied"])
         self.assertTrue((self.target / "nested" / "folder").is_dir())
 
+    def test_mkdir_rejects_file_in_preview_and_apply(self):
+        (self.target / 'blocked').write_bytes(b'preserve')
+        for path in ('blocked', 'blocked/child'):
+            for flags in ((), ('--apply',)):
+                code, data = self.cli('mkdir', '--root', 'nas', '--path', path, *flags)
+                self.assertEqual(code, 2)
+                self.assertFalse(data['ok'])
+        self.assertEqual((self.target / 'blocked').read_bytes(), b'preserve')
+
+    def test_sync_status_requires_array(self):
+        status = self.base / 'status.json'
+        self.config['sync_status_file'] = str(status)
+        self.save_config()
+        for value in ('private details', {'private details': 1}, None):
+            status.write_text(json.dumps({'errors': value}))
+            code, data = self.cli('sync-status')
+            self.assertEqual(code, 2)
+            self.assertFalse(data['ok'])
+            self.assertNotIn('private details', json.dumps(data))
+
     def test_timeout_report(self):
         with patch.object(sys, "argv", [str(SCRIPT), "status", "--root", "nas"]), \
              patch.object(storage.subprocess, "run", side_effect=subprocess.TimeoutExpired("worker", 1)), \
