@@ -11,7 +11,7 @@ import subprocess
 import sys
 import time
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 DEFAULT_CONFIG = Path.home() / ".config" / "synology-storage" / "config.json"
 
 
@@ -181,7 +181,10 @@ def run(config, args):
             raise StorageError("Status must be a JSON object.")
         # Do not echo error strings, which can contain private hostnames or paths.
         public = {key: data[key] for key in ("phase", "started", "updated", "copied", "freed_bytes") if key in data}
-        public["error_count"] = len(data.get("errors", []))
+        errors = data.get("errors", [])
+        if not isinstance(errors, list):
+            raise StorageError("Status errors must be an array.")
+        public["error_count"] = len(errors)
         public["age_seconds"] = max(0, round(time.time() - path.stat().st_mtime))
         public["stale"] = public["age_seconds"] > args.max_age
         public["source"] = "external_status_file"
@@ -195,6 +198,9 @@ def run(config, args):
     if args.command == "hash":
         return dict(root=args.root, path=args.path, sha256=digest(path))
     if args.command == "mkdir":
+        for candidate in (path, *path.parents):
+            if candidate.exists() and not candidate.is_dir():
+                raise StorageError("Directory path is blocked by an existing file.")
         if not args.apply:
             return dict(applied=False, operation="mkdir", exists=path.exists())
         path.mkdir(parents=True, exist_ok=True)
